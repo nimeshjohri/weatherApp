@@ -1,0 +1,151 @@
+<!doctype html>
+<html class="no-js">
+  <head>
+    <meta charset="utf-8">
+    <title>Weather App</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+    <!-- build:css(.) styles/vendor.css -->
+    <!-- bower:css -->
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
+    <!-- endbower -->
+    <!-- endbuild -->
+    <!-- build:css(.tmp) styles/main.css -->
+    <link rel="stylesheet" href="styles/main.css">
+    <!-- endbuild -->
+  </head>
+  <body ng-app="weatherAppApp">
+    <!--[if lt IE 7]>
+      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+
+    <!-- Add your site or application content here -->
+    <div class="container" ng-controller="MainCtrl" ng-cloak>
+      <div class="header">
+        <ul class="nav nav-pills pull-right">
+          <li class="active"><a ng-href="#">Home</a></li>
+          <li><a ng-href="#/about">About</a></li>
+          <li><select id="viewBy" ng-model="viewBy">
+          <option value="">Select a State</option>  
+          <option value="1">Jaipur</option>
+          <option value="2" selected="selected">Gurgaon</option>
+          <option value="3">Mumbai</option>
+          <option value="4">Kolkata</option>
+          <option value="5">Hyderabad</option>
+          <option value="6">Chennai</option>
+          <option value="7">Ahmedabad</option>
+          </select></li>
+        </ul>
+        <h3 class="text-muted">weatherApp</h3>
+      </div>
+       <div id="currentConditions">
+        <h1>{{currentData.location.city}}, {{currentData.location.country_name}}</h1>
+        <h4 style="display:inline"><span class="glyphicon glyphicon-plane" aria-hidden="true"></span> {{currentData.location.nearby_weather_stations.airport.station[1].city}} Airport</h4>
+        <h5 id="modh5" style="display:inline"><b>{{currentData.current_observation.local_time_rfc822}}</b></h5>
+        <hr>
+        <div class="small-12 medium-6 large-4 columns cc1" style="border-right: 1px solid silver;margin-top:-20px;margin-bottom:-20px;width:420px;height:270px;">
+          <div class="row">
+          <div class="small-12 columns"><br>
+        <h5><b>{{latt}}</b>°N, <b>{{long}}</b>°E <span class="split"> | </span> <b>{{currentData.current_observation.observation_time}}</b></h5>
+          </div><br>
+          <div class="small-3 columns">
+            <img id="weather_icon"src={{icon}}><br>
+            &nbsp;&nbsp;{{currentData.current_observation.weather}} 
+          </div>
+          <div id="feellike" class="small-6 columns">
+            <span id="feelstyle">{{currentData.current_observation.temp_c}} °C</span><br>
+            &nbsp;&nbsp;Feels Like <span style="color:#33CC33;"><b>{{currentData.current_observation.feelslike_c}} °C</b></span>
+          </div>
+       </div><br><br>
+       <div>Today<br>
+       High <span style="color:#FF3333"><b>{{currentData.forecast.simpleforecast.forecastday[0].high.celsius}}°C</b></span> | Low<span style="color:#0066FF";>  <b>{{currentData.forecast.simpleforecast.forecastday[0].low.celsius}}°C</b></span>
+     </div>
+     <div id="tomorrow">
+      <span style="color:#0066CC">Tomorrow</span><br>
+      High <span style="color:#FF3333"><b>{{currentData.forecast.simpleforecast.forecastday[1].high.celsius}}°C</b></span> | Low<span style="color:#0066FF";>  <b>{{currentData.forecast.simpleforecast.forecastday[1].low.celsius}}°C</b></span>
+    </div>
+     </div>
+     <div id="otherProp" class="small-12 medium-6 large-4 columns cc1">
+      <br>
+      <table style="width:290px">
+        <tr>
+          <td>Pressure</td>
+          <td><b>{{currentData.current_observation.pressure_mb}}</b> hPa</td>    
+        </tr>
+        <tr>
+          <td>Visibility</td>
+          <td><b>{{currentData.current_observation.visibility_km}}</b> Km</td>
+        </tr>
+        <tr>
+          <td>Dew Point</td>
+          <td><b>{{currentData.current_observation.dewpoint_c}}</b> °C</td>
+        </tr>
+        <tr>
+          <td>Wind Speed</td>
+          <td><b>{{currentData.current_observation.wind_kph}}</b> Kph</td>
+        </tr>
+        <tr>
+          <td>Wind Direction</td>
+          <td><b>{{currentData.current_observation.wind_dir}}</b> @ <b>{{currentData.current_observation.wind_degrees}}</b> Degrees</td>
+        </tr>
+        <tr>
+          <td>Humidity</td>
+          <td><b>{{currentData.current_observation.relative_humidity}}</b></td>
+        </tr>
+        <tr>
+          <td>UV</td>
+          <td><b>{{currentData.current_observation.UV}}</b> </td>
+        </tr>
+      </table>
+     </div>
+     <div id="gmaps" style="width:360px;height:250px;margin-left:780px;margin-top:-270px">
+      
+    </div>
+     <hr>
+   </div>
+      <div id="contain" class="jumbotron"></div>
+      <div class="btn-group" role="group" aria-label="...">
+        <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-cloud" aria-hidden="true"></span>&nbsp;{{newArray[0]}}</button>
+        <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span>&nbsp;{{newArray[1]}}</button>
+        <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-cloud" aria-hidden="true"></span>&nbsp;{{newArray[2]}}</button>
+        <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-cloud" aria-hidden="true"></span>&nbsp;{{newArray[3]}}</button>
+        <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-cloud" aria-hidden="true"></span>&nbsp;{{newArray[4]}}</button>
+        <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span>&nbsp;{{newArray[5]}}</button>
+        <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-cloud" aria-hidden="true"></span>&nbsp;&nbsp;{{newArray[6]}}</button>
+      </div>
+
+      <div class="footer">
+        <p><span class="glyphicon glyphicon-heart"></span> from the Yeoman team</p>
+      </div>
+    </div>
+
+    <!-- build:js(.) scripts/oldieshim.js -->
+    <!--[if lt IE 9]>
+    <script src="bower_components/es5-shim/es5-shim.js"></script>
+    <script src="bower_components/json3/lib/json3.js"></script>
+    <![endif]-->
+    <!-- endbuild -->
+
+    <!-- build:js(.) scripts/vendor.js -->
+    <!-- bower:js -->
+    <script src="bower_components/jquery/dist/jquery.js"></script>
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="bower_components/angular-cookies/angular-cookies.js"></script>
+    <script src="bower_components/angular-route/angular-route.js"></script>
+    <!-- endbower -->
+    <!-- endbuild -->
+
+        <!-- build:js({.tmp,app}) scripts/scripts.js -->
+        <script src="scripts/app.js"></script>
+        <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB9lKhAJL64s_9z0iCpFVjNfO5qTGwKi0g"></script>
+        <script src="scripts/weatherData.js"></script>
+        <script src="scripts/controllers/main.js"></script>
+        <script src="scripts/controllers/about.js"></script>
+        <script src="bower_components/highcharts-release/highcharts.js"></script>
+        <script src="bower_components/highcharts-release/modules/exporting.js"></script>
+        <script src="bower_components/underscore/underscore.js"></script>
+        <!-- endbuild -->
+</body>
+</html>
